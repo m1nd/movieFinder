@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Jsonp } from "@angular/http";
 import "rxjs/Rx";
+import * as moment from "moment";
 
 @Injectable()
 export class MovieService {
@@ -21,9 +22,13 @@ export class MovieService {
   }
 
   getInTheaters() {
+    const olderDate = moment().subtract(1, "months").format("YYYY-MM-DD");
+    const laterDate = moment().format("YYYY-MM-DD");
+
+    console.log(`${olderDate} \n ${laterDate}`);
     return this.__jsonp
       .get(
-        `https://api.themoviedb.org/3/discover/movie?callback=JSONP_CALLBACK&primary_release_date.gte=2017-03-01&primary_release_date.lte=2017-06-15&api_key=${this
+        `https://api.themoviedb.org/3/discover/movie?callback=JSONP_CALLBACK&primary_release_date.gte=${olderDate}&primary_release_date.lte=${laterDate}&api_key=${this
           .apikey}`
       )
       .map(res => res.json());
